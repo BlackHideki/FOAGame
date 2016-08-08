@@ -30,9 +30,13 @@ public class GameFunctionBase extends JFrame {
 	 * @param width ウィンドウの幅
 	 * @param height ウィンドウの高さ
 	 */
-	public GameFunctionBase(String title, int width, int height){
+	public GameFunctionBase(String title, int width, int height) {
 		setTitle(title);
-		getContentPane().setPreferredSize(new Dimension(width - 10, height - 10));
+		if (isMac()) {
+			getContentPane().setPreferredSize(new Dimension(width, height));
+		} else {
+			getContentPane().setPreferredSize(new Dimension(width - 10, height - 10));
+		}
 		pack();
 		setResizable(false);
 	    setLocationRelativeTo(null);
@@ -74,4 +78,12 @@ public class GameFunctionBase extends JFrame {
 		}else if(e.getID() == 502){}
 	}
 
+	/**
+	 * MacOSであるか調べる
+	 * @return
+	 */
+    private boolean isMac() {
+        String lcOSName = System.getProperty("os.name").toLowerCase();
+        return lcOSName.startsWith("mac os x");
+    }
 }
