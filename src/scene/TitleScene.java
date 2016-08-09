@@ -24,7 +24,7 @@ public class TitleScene implements Scene {
 	/**
 	 * タイトルロゴ
 	 */
-	private ImageFileReader titleLogo;
+	private ImageFileReader logo;
 
 	/**
 	 * メニュースタート
@@ -64,7 +64,7 @@ public class TitleScene implements Scene {
 
 		bg = new ImageFileReader("images/bg.png");
 
-		titleLogo = new ImageFileReader("images/title_logo.png", 500, 150);
+		logo = new ImageFileReader("images/title_logo.png", 500, 150);
 
 		menuStart = new ImageFileReader("images/menu_start.png", 101, 50);
 
@@ -95,6 +95,7 @@ public class TitleScene implements Scene {
 	 */
 	@Override
 	public void action() {
+
 	}
 
 	/**
@@ -116,6 +117,16 @@ public class TitleScene implements Scene {
 				currentPoint = cursorPointList.get(1);
 			} else if (currentPoint.equals(cursorPointList.get(1))) {
 				currentPoint = cursorPointList.get(2);
+			}
+			break;
+
+		case KeyEvent.VK_ENTER:
+			if(currentPoint.equals(cursorPointList.get(0))) {
+				gameFlg = GameFlg.NEXT;
+			} else if (currentPoint.equals(cursorPointList.get(1))) {
+				gameFlg = GameFlg.RANKING;
+			} else {
+				gameFlg = GameFlg.RULE;
 			}
 			break;
 		}
@@ -142,7 +153,7 @@ public class TitleScene implements Scene {
 	public void paint(Graphics graphics) {
 		graphics.drawImage(bg.getImage(), 0, 0, null);
 
-		graphics.drawImage(titleLogo.getImage(), Execute.WINDOW_WIDTH / 2 - titleLogo.getSize().width / 2, Execute.WINDOW_HEIGHT / 5, null);
+		graphics.drawImage(logo.getImage(), Execute.WINDOW_WIDTH / 2 - logo.getSize().width / 2, Execute.WINDOW_HEIGHT / 5, null);
 
 		graphics.drawImage(menuStart.getImage(), Execute.WINDOW_WIDTH / 2 - menuStart.getSize().width / 2, Execute.WINDOW_HEIGHT / 2 - menuStart.getSize().height, null);
 

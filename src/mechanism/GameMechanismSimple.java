@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.LinkedList;
 
-import scene.GameFlg;
+import scene.MainScene;
+import scene.RankingScene;
+import scene.RuleScene;
 import scene.Scene;
 import scene.TitleScene;
 
@@ -23,7 +25,7 @@ public class GameMechanismSimple {
 	/**
 	 * 現在のシーン
 	 */
-	private int sceneListIndex;
+	private Scene currentScene;
 
 	/**
 	 * 新しく生成する
@@ -31,31 +33,45 @@ public class GameMechanismSimple {
 	public GameMechanismSimple() {
 		sceneList = new LinkedList<>();
 		sceneList.add(new TitleScene());
+		sceneList.add(new MainScene());
+		sceneList.add(new RankingScene());
+		sceneList.add(new RuleScene());
 
-		sceneListIndex = 0;
+		currentScene = sceneList.get(0);
 	}
 
 	/**
 	 * 初期化
 	 */
 	public void init() {
-		sceneList.get(sceneListIndex).init();
+		currentScene.init();
 	}
 
 	/**
 	 * 処理
 	 */
+	@SuppressWarnings("incomplete-switch")
 	public void action() {
-		if (sceneList.get(sceneListIndex).getGameFlg() == GameFlg.NEXT){
-			if (sceneListIndex < 1) {
-				sceneListIndex = 1;
+		switch (currentScene.getGameFlg()) {
+		case RANKING:
+			currentScene = sceneList.get(2);
+			break;
+
+		case RULE:
+			currentScene = sceneList.get(3);
+			break;
+
+		case NEXT:
+			if (currentScene.equals(sceneList.get(0))) {
+				currentScene = sceneList.get(1);
 			} else {
-				sceneListIndex = 0;
+				currentScene = sceneList.get(0);
 			}
 			init();
+			break;
 		}
 
-		sceneList.get(sceneListIndex).action();
+		currentScene.action();
 	}
 
 	/**
@@ -63,14 +79,14 @@ public class GameMechanismSimple {
 	 * @param key
 	 */
 	public void keyPressed(int key) {
-		sceneList.get(sceneListIndex).keyPressed(key);
+		currentScene.keyPressed(key);
 	}
 
 	/**
 	 * キーが離された瞬間に呼び出される
 	 */
 	public void keyReleased() {
-		sceneList.get(sceneListIndex).keyReleased();
+		currentScene.keyReleased();
 	}
 
 	/**
@@ -78,13 +94,13 @@ public class GameMechanismSimple {
 	 * @param position クリックした瞬間の座標
 	 */
 	public void mouseClick(Point position) {
-		sceneList.get(sceneListIndex).mouseClick(position);
+		currentScene.mouseClick(position);
 	}
 
 	/**
 	 * 描画
 	 */
 	public void paint(Graphics graphics) {
-		sceneList.get(sceneListIndex).paint(graphics);
+		currentScene.paint(graphics);
 	}
 }

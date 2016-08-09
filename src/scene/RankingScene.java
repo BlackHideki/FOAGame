@@ -3,6 +3,8 @@ package scene;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import file.ImageFileReader;
+
 public class RankingScene implements Scene {
 
 	/**
@@ -11,10 +13,39 @@ public class RankingScene implements Scene {
 	private GameFlg gameFlg;
 
 	/**
+	 * 背景
+	 */
+	private ImageFileReader bg;
+
+	/**
+	 * タイトルロゴ
+	 */
+	private ImageFileReader logo;
+
+	/**
+	 * タイトルロゴ
+	 */
+	private ImageFileReader rankingOne;
+
+	/**
+	 * タイトルロゴ
+	 */
+	private ImageFileReader rankingTwo;
+
+	/**
+	 * タイトルロゴ
+	 */
+	private ImageFileReader rankingThree;
+
+	/**
 	 * RankingScene を新しく生成
 	 */
 	public RankingScene () {
 		gameFlg = GameFlg.TOP;
+
+		bg = new ImageFileReader("images/bg.png");
+
+		logo = new ImageFileReader("images/ranking_logo.png", 500, 150);
 	}
 
 	/**
@@ -58,6 +89,7 @@ public class RankingScene implements Scene {
 	 */
 	@Override
 	public void paint(Graphics graphics) {
+
 	}
 
 	/**
