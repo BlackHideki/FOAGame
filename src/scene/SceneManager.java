@@ -28,6 +28,7 @@ public class SceneManager {
 		sceneList = new LinkedList<>();
 		sceneList.add(new TitleScene());
 		sceneList.add(new MainScene());
+		sceneList.add(new GameOverScene());
 		sceneList.add(new RankingScene());
 		sceneList.add(new RuleScene());
 
@@ -49,23 +50,29 @@ public class SceneManager {
 			switch (currentScene.getSceneFlg()) {
 			case TITLE:
 				currentScene = sceneList.get(0);
-				init();
 				break;
 
 			case MAIN:
 				currentScene = sceneList.get(1);
-				init();
+				break;
+
+			case GAMEOVER:
+				currentScene = sceneList.get(2);
 				break;
 
 			case RANKING:
-				currentScene = sceneList.get(2);
-				init();
+				currentScene = sceneList.get(3);
+
 				break;
 
 			case RULE:
-				currentScene = sceneList.get(3);
+				currentScene = sceneList.get(4);
 				break;
 			}
+		}
+
+		if (currentScene.getSceneFlg() != null) {
+			init();
 		}
 
 		currentScene.action();

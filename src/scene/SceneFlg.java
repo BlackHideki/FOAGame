@@ -10,4 +10,5 @@ public enum SceneFlg {
 	RANKING,
 	RULE,
 	MAIN,
+	GAMEOVER,
 }

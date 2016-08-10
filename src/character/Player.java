@@ -2,6 +2,7 @@ package character;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 
 import com.sun.glass.events.KeyEvent;
 
@@ -28,7 +29,7 @@ public class Player implements Character {
 	/**
 	 * 表示されているX座標
 	 */
-	private int positionX;
+	private Point position;
 
 	/**
 	 * 左を向いている時のイメージ
@@ -72,6 +73,8 @@ public class Player implements Character {
 		image = new ImageFileReader("images/player.png", 150, 200);
 
 		size = new Dimension(50, 50);
+
+		position = new Point(0, Execute.WINDOW_HEIGHT - 131);
 	}
 
 	/**
@@ -79,8 +82,6 @@ public class Player implements Character {
 	 */
 	@Override
 	public void init() {
-		positionX = 0;
-
 		dirLeft = 50;
 
 		dirRight = 100;
@@ -107,8 +108,8 @@ public class Player implements Character {
 				dir = dirLeft;
 			}
 
-			if (positionX >= - 9) {
-				positionX -= 5;
+			if (position.x >= - 9) {
+				position.x -= 5;
 			}
 			break;
 
@@ -116,8 +117,8 @@ public class Player implements Character {
 			if (dir != dirRight) {
 				dir = dirRight;
 			}
-			if (positionX <= Execute.WINDOW_WIDTH - size.width + 9) {
-				positionX += 5;
+			if (position.x <= Execute.WINDOW_WIDTH - size.width + 9) {
+				position.x += 5;
 			}
 			break;
 		}
@@ -150,7 +151,39 @@ public class Player implements Character {
 	 */
 	@Override
 	public void paint(Graphics graphics) {
-		graphics.drawImage(image.getImage().getSubimage(imageInX, dir, size.width, size.height), positionX, Execute.WINDOW_HEIGHT - 131, null);
+		graphics.drawImage(image.getImage().getSubimage(imageInX, dir, size.width, size.height), position.x, position.y, null);
+	}
+
+	/**
+	 * サイズを取得
+	 * @return
+	 */
+	public Dimension getSize() {
+		return size;
+	}
+
+	/**
+	 * サイズを参照
+	 * @param size
+	 */
+	public void setSize(Dimension size) {
+		this.size = size;
+	}
+
+	/**
+	 * 表示座標を取得
+	 * @return
+	 */
+	public Point getPosition() {
+		return position;
+	}
+
+	/**
+	 * 表示座標を格納
+	 * @param position
+	 */
+	public void setPosition(Point position) {
+		this.position = position;
 	}
 
 	/**
