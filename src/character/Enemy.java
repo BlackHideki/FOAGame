@@ -29,15 +29,27 @@ public class Enemy implements Character {
 	private Point position;
 
 	/**
-	 * 初期化
+	 * エネミーをカラー別に配列に格納
 	 */
-	@Override
-	public void init() {
+	private int[] enemyColor;
+
+	/**
+	 * Enemy を新しく生成
+	 */
+	public Enemy() {
 		image = new ImageFileReader("images/enemy.png", 560, 400);
 
 		size = new Dimension(40, 40);
 
 		position = new Point(0, 0);
+	}
+
+	/**
+	 * 初期化
+	 */
+	@Override
+	public void init() {
+
 	}
 
 	/**
@@ -69,7 +81,7 @@ public class Enemy implements Character {
 	 */
 	@Override
 	public void paint(Graphics graphics) {
-		graphics.drawImage(image.getImage(), position.x, position.y, null);
+		graphics.drawImage(image.getImage().getSubimage(70, size.height, size.width, size.height), position.x + 10, position.y, null);
 	}
 
 }

@@ -56,12 +56,12 @@ public class GameFunctionBase extends JFrame {
 	 * キーイベント
 	 */
 	protected void processKeyEvent(KeyEvent e) {
-		if(e.getID() == 400 || e.getID() == 401){
+		if(e.getID() == KeyEvent.KEY_PRESSED){
 			if(!keyFlg){
 				keyFlg = true;
 				glb.keyPressed(e.getKeyCode());
 			}
-		}else if(e.getID() == 402){
+		}else if(e.getID() == KeyEvent.KEY_RELEASED){
 			if(keyFlg){
 				keyFlg = false;
 				glb.keyReleased();
@@ -72,10 +72,10 @@ public class GameFunctionBase extends JFrame {
 	/**
 	 * マウスイベント
 	 */
-	protected void processMouseEvent(MouseEvent e){
-		if(e.getID() == 501){
+	protected void processMouseEvent(MouseEvent e) {
+		if(e.getID() == MouseEvent.MOUSE_PRESSED){
 			glb.mouseClick(e.getPoint());
-		}else if(e.getID() == 502){}
+		}else if(e.getID() == MouseEvent.MOUSE_RELEASED){}
 	}
 
 	/**
