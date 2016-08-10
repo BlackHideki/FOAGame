@@ -5,7 +5,7 @@ import java.awt.Point;
 
 import javax.swing.JPanel;
 
-import mechanism.GameMechanismSimple;
+import scene.SceneManager;
 
 /**
  * ゲームの仕組みを構築する為に必要な機能を構築する為のクラス
@@ -17,7 +17,7 @@ public class GameMechanism extends JPanel implements Runnable {
 	/**
 	 * ゲームの仕組みを簡略化したクラス
 	 */
-	private GameMechanismSimple gms;
+	private SceneManager sceneManager;
 
 	/**
 	 * 指定された幅、高さのパネルを新しく生成する
@@ -25,7 +25,7 @@ public class GameMechanism extends JPanel implements Runnable {
 	public GameMechanism(int width, int height){
 		setSize(width, height);
 
-		gms = new GameMechanismSimple();
+		sceneManager = new SceneManager();
 
 		new Thread(this).start();
 	}
@@ -34,7 +34,7 @@ public class GameMechanism extends JPanel implements Runnable {
 	 * 初期化
 	 */
 	public void init() {
-		gms.init();
+		sceneManager.init();
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class GameMechanism extends JPanel implements Runnable {
 	 * 処理
 	 */
 	public void action(){
-		gms.action();
+		sceneManager.action();
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class GameMechanism extends JPanel implements Runnable {
 	 */
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
-		gms.paint(graphics);
+		sceneManager.paint(graphics);
 	}
 
 	/**
@@ -73,14 +73,14 @@ public class GameMechanism extends JPanel implements Runnable {
 	 * @param key 押されたキーコード
 	 */
 	public void keyPressed(int key) {
-		gms.keyPressed(key);
+		sceneManager.keyPressed(key);
 	}
 
 	/**
 	 * キーが離された瞬間に呼び出される
 	 */
 	public void keyReleased() {
-		gms.keyReleased();
+		sceneManager.keyReleased();
 	}
 
 	/**
@@ -88,6 +88,6 @@ public class GameMechanism extends JPanel implements Runnable {
 	 * @param position クリックした瞬間の座標
 	 */
 	public void mouseClick(Point position) {
-		gms.mouseClick(position);
+		sceneManager.mouseClick(position);
 	}
 }

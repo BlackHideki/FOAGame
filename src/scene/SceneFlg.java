@@ -5,12 +5,9 @@ package scene;
  * @author kudo
  *
  */
-public enum GameFlg {
-	TOP,
+public enum SceneFlg {
+	TITLE,
 	RANKING,
 	RULE,
-	READY,
-	START,
-	END,
-	NEXT,
+	MAIN,
 }

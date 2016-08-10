@@ -1,16 +1,22 @@
 package scene;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import com.sun.glass.events.KeyEvent;
+
+import base.Execute;
 import file.ImageFileReader;
+import file.TextFileReader;
 
 public class RankingScene implements Scene {
 
 	/**
-	 * ゲームフラグ
+	 * シーンフラグ
 	 */
-	private GameFlg gameFlg;
+	private SceneFlg sceneFlg;
 
 	/**
 	 * 背景
@@ -23,29 +29,54 @@ public class RankingScene implements Scene {
 	private ImageFileReader logo;
 
 	/**
-	 * タイトルロゴ
+	 * ランキング1イメージ
 	 */
 	private ImageFileReader rankingOne;
 
 	/**
-	 * タイトルロゴ
+	 * ランキング2イメージ
 	 */
 	private ImageFileReader rankingTwo;
 
 	/**
-	 * タイトルロゴ
+	 * ランキング3イメージ
 	 */
 	private ImageFileReader rankingThree;
+
+	/**
+	 * カーソル
+	 */
+	private ImageFileReader cursor;
+
+	/**
+	 * メニューバック
+	 */
+	private ImageFileReader menuBack;
+
+	/**
+	 * ランキング
+	 */
+	private TextFileReader ranking;
 
 	/**
 	 * RankingScene を新しく生成
 	 */
 	public RankingScene () {
-		gameFlg = GameFlg.TOP;
-
 		bg = new ImageFileReader("images/bg.png");
 
-		logo = new ImageFileReader("images/ranking_logo.png", 500, 150);
+		logo = new ImageFileReader("images/ranking_logo.png", 480, 150);
+
+		rankingOne = new ImageFileReader("images/ranking_one.png", 100, 100);
+
+		rankingTwo = new ImageFileReader("images/ranking_two.png", 70, 70);
+
+		rankingThree = new ImageFileReader("images/ranking_three.png", 50, 50);
+
+		cursor = new ImageFileReader("images/player.png", 120, 160);
+
+		menuBack = new ImageFileReader("images/menu_back.png", 88, 50);
+
+		ranking = new TextFileReader("text/ranking.txt");
 	}
 
 	/**
@@ -53,7 +84,8 @@ public class RankingScene implements Scene {
 	 */
 	@Override
 	public void init() {
-		gameFlg = GameFlg.TOP;
+		sceneFlg = null;
+		ranking.textRead();
 	}
 
 	/**
@@ -68,6 +100,9 @@ public class RankingScene implements Scene {
 	 */
 	@Override
 	public void keyPressed(int key) {
+		if (key == KeyEvent.VK_ENTER) {
+			sceneFlg = SceneFlg.TITLE;
+		}
 	}
 
 	/**
@@ -89,15 +124,36 @@ public class RankingScene implements Scene {
 	 */
 	@Override
 	public void paint(Graphics graphics) {
+		graphics.drawImage(bg.getImage(), 0, 0, null);
 
+		graphics.drawImage(logo.getImage(), Execute.WINDOW_WIDTH / 2 - logo.getSize().width / 2, Execute.WINDOW_HEIGHT / 5, null);
+
+		graphics.drawImage(rankingOne.getImage(), Execute.WINDOW_WIDTH / 2 - rankingOne.getSize().width * 2, Execute.WINDOW_HEIGHT / 2 - rankingOne.getSize().height / 2, null);
+		graphics.drawImage(rankingTwo.getImage(), Execute.WINDOW_WIDTH / 2 - rankingOne.getSize().width * 2 + rankingOne.getSize().width / 2 - rankingTwo.getSize().width / 2, Execute.WINDOW_HEIGHT / 2 + rankingOne.getSize().height / 2, null);
+		graphics.drawImage(rankingThree.getImage(), Execute.WINDOW_WIDTH / 2 - rankingOne.getSize().width * 2 + rankingOne.getSize().width / 2 - rankingThree.getSize().width / 2, Execute.WINDOW_HEIGHT / 2 + rankingOne.getSize().height / 2 + rankingTwo.getSize().height, null);
+
+		graphics.setColor(Color.BLACK);
+
+		graphics.setFont(new Font("メイリオ", Font.BOLD, 100));
+		graphics.drawString(ranking.getText().get(0), Execute.WINDOW_WIDTH / 2 , Execute.WINDOW_HEIGHT / 2 - rankingOne.getSize().height / 2 + rankingOne.getSize().height);
+
+		graphics.setFont(new Font("メイリオ", Font.BOLD, 70));
+		graphics.drawString(ranking.getText().get(1), Execute.WINDOW_WIDTH / 2 + 25, Execute.WINDOW_HEIGHT / 2 + rankingOne.getSize().height / 2 + rankingTwo.getSize().height);
+
+		graphics.setFont(new Font("メイリオ", Font.BOLD, 50));
+		graphics.drawString(ranking.getText().get(2), Execute.WINDOW_WIDTH / 2 + 40, Execute.WINDOW_HEIGHT / 2 + rankingOne.getSize().height / 2 + rankingTwo.getSize().height + rankingThree.getSize().height);
+
+		graphics.drawImage(menuBack.getImage(), Execute.WINDOW_WIDTH - menuBack.getSize().width, Execute.WINDOW_HEIGHT - menuBack.getSize().height, null);
+
+		graphics.drawImage(cursor.getImage().getSubimage(40, 0, 40, 40), Execute.WINDOW_WIDTH - menuBack.getSize().width - 40, Execute.WINDOW_HEIGHT - menuBack.getSize().height, null);
 	}
 
 	/**
 	 * ゲームフラグ取得
 	 */
 	@Override
-	public GameFlg getGameFlg() {
-		return gameFlg;
+	public SceneFlg getSceneFlg() {
+		return sceneFlg;
 	}
 
 }

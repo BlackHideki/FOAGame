@@ -22,5 +22,5 @@ public interface Scene {
 
 	public void paint(Graphics graphics);
 
-	public GameFlg getGameFlg();
+	public SceneFlg getSceneFlg();
 }

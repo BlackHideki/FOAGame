@@ -1,21 +1,15 @@
-package mechanism;
+package scene;
 
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.LinkedList;
-
-import scene.MainScene;
-import scene.RankingScene;
-import scene.RuleScene;
-import scene.Scene;
-import scene.TitleScene;
 
 /**
  * ゲームの仕組みを簡略化したクラス
  * @author kudouhideki
  *
  */
-public class GameMechanismSimple {
+public class SceneManager {
 
 	/**
 	 * 各シーンを格納するリスト
@@ -30,14 +24,14 @@ public class GameMechanismSimple {
 	/**
 	 * 新しく生成する
 	 */
-	public GameMechanismSimple() {
+	public SceneManager() {
 		sceneList = new LinkedList<>();
 		sceneList.add(new TitleScene());
 		sceneList.add(new MainScene());
 		sceneList.add(new RankingScene());
 		sceneList.add(new RuleScene());
 
-		currentScene = sceneList.get(0);
+		currentScene = sceneList.get(1);
 	}
 
 	/**
@@ -50,25 +44,28 @@ public class GameMechanismSimple {
 	/**
 	 * 処理
 	 */
-	@SuppressWarnings("incomplete-switch")
 	public void action() {
-		switch (currentScene.getGameFlg()) {
-		case RANKING:
-			currentScene = sceneList.get(2);
-			break;
-
-		case RULE:
-			currentScene = sceneList.get(3);
-			break;
-
-		case NEXT:
-			if (currentScene.equals(sceneList.get(0))) {
-				currentScene = sceneList.get(1);
-			} else {
+		if (currentScene.getSceneFlg() != null) {
+			switch (currentScene.getSceneFlg()) {
+			case TITLE:
 				currentScene = sceneList.get(0);
+				init();
+				break;
+
+			case MAIN:
+				currentScene = sceneList.get(1);
+				init();
+				break;
+
+			case RANKING:
+				currentScene = sceneList.get(2);
+				init();
+				break;
+
+			case RULE:
+				currentScene = sceneList.get(3);
+				break;
 			}
-			init();
-			break;
 		}
 
 		currentScene.action();

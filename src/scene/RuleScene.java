@@ -3,18 +3,35 @@ package scene;
 import java.awt.Graphics;
 import java.awt.Point;
 
+import com.sun.glass.events.KeyEvent;
+
+import base.Execute;
+import file.ImageFileReader;
+
 public class RuleScene implements Scene {
 
 	/**
-	 * ゲームフラグ
+	 * シーンフラグ
 	 */
-	private GameFlg gameFlg;
+	private SceneFlg sceneFlg;
+
+	/**
+	 * カーソル
+	 */
+	private ImageFileReader cursor;
+
+	/**
+	 * メニューバック
+	 */
+	private ImageFileReader menuBack;
 
 	/**
 	 * TitleScene を新しく生成
 	 */
 	public RuleScene () {
-		gameFlg = GameFlg.TOP;
+		cursor = new ImageFileReader("images/player.png", 120, 160);
+
+		menuBack = new ImageFileReader("images/menu_back.png", 88, 50);
 	}
 
 	/**
@@ -22,7 +39,7 @@ public class RuleScene implements Scene {
 	 */
 	@Override
 	public void init() {
-		gameFlg = GameFlg.TOP;
+		sceneFlg = null;
 	}
 
 	/**
@@ -37,6 +54,9 @@ public class RuleScene implements Scene {
 	 */
 	@Override
 	public void keyPressed(int key) {
+		if (key == KeyEvent.VK_ENTER) {
+			sceneFlg = SceneFlg.TITLE;
+		}
 	}
 
 	/**
@@ -58,14 +78,17 @@ public class RuleScene implements Scene {
 	 */
 	@Override
 	public void paint(Graphics graphics) {
+		graphics.drawImage(menuBack.getImage(), Execute.WINDOW_WIDTH - menuBack.getSize().width, Execute.WINDOW_HEIGHT - menuBack.getSize().height, null);
+
+		graphics.drawImage(cursor.getImage().getSubimage(40, 0, 40, 40), Execute.WINDOW_WIDTH - menuBack.getSize().width - 40, Execute.WINDOW_HEIGHT - menuBack.getSize().height, null);
 	}
 
 	/**
 	 * ゲームフラグ取得
 	 */
 	@Override
-	public GameFlg getGameFlg() {
-		return gameFlg;
+	public SceneFlg getSceneFlg() {
+		return sceneFlg;
 	}
 
 }

@@ -9,12 +9,17 @@ import com.sun.glass.events.KeyEvent;
 import base.Execute;
 import file.ImageFileReader;
 
+/**
+ * タイトルシーンを構築する為のクラス
+ * @author kudo
+ *
+ */
 public class TitleScene implements Scene {
 
 	/**
 	 * ゲームフラグ
 	 */
-	private GameFlg gameFlg;
+	private SceneFlg sceneFlg;
 
 	/**
 	 * 背景
@@ -60,8 +65,6 @@ public class TitleScene implements Scene {
 	 * TitleScene を新しく生成
 	 */
 	public TitleScene () {
-		gameFlg = GameFlg.TOP;
-
 		bg = new ImageFileReader("images/bg.png");
 
 		logo = new ImageFileReader("images/title_logo.png", 500, 150);
@@ -87,7 +90,7 @@ public class TitleScene implements Scene {
 	 */
 	@Override
 	public void init() {
-		gameFlg = GameFlg.TOP;
+		sceneFlg = null;
 	}
 
 	/**
@@ -122,11 +125,11 @@ public class TitleScene implements Scene {
 
 		case KeyEvent.VK_ENTER:
 			if(currentPoint.equals(cursorPointList.get(0))) {
-				gameFlg = GameFlg.NEXT;
+				sceneFlg = SceneFlg.MAIN;
 			} else if (currentPoint.equals(cursorPointList.get(1))) {
-				gameFlg = GameFlg.RANKING;
+				sceneFlg = SceneFlg.RANKING;
 			} else {
-				gameFlg = GameFlg.RULE;
+				sceneFlg = SceneFlg.RULE;
 			}
 			break;
 		}
@@ -168,8 +171,8 @@ public class TitleScene implements Scene {
 	 * ゲームフラグ取得
 	 */
 	@Override
-	public GameFlg getGameFlg() {
-		return gameFlg;
+	public SceneFlg getSceneFlg() {
+		return sceneFlg;
 	}
 
 }
