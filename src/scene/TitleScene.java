@@ -8,6 +8,8 @@ import com.sun.glass.events.KeyEvent;
 
 import base.Execute;
 import file.ImageFileReader;
+import file.WAVFileReader;
+import flg.SceneFlg;
 
 /**
  * タイトルシーンを構築する為のクラス
@@ -52,14 +54,29 @@ public class TitleScene implements Scene {
 	private ImageFileReader cursor;
 
 	/**
+	 * bgm
+	 */
+	private WAVFileReader bgm;
+
+	/**
+	 * カーソル音
+	 */
+	private WAVFileReader cursorSE;
+
+	/**
+	 * 決定音
+	 */
+	private WAVFileReader dicideSE;
+
+	/**
 	 * カーソルの表示座標
 	 */
-	private ArrayList<Point> cursorPointList;
+	private ArrayList<Point> cursorPositionList;
 
 	/**
 	 * カーソルの現在の表示座標
 	 */
-	private Point currentPoint;
+	private Point currentPosition;
 
 	/**
 	 * TitleScene を新しく生成
@@ -77,12 +94,18 @@ public class TitleScene implements Scene {
 
 		cursor = new ImageFileReader("images/player.png", 120, 160);
 
-		cursorPointList = new ArrayList<>();
-		cursorPointList.add(new Point(Execute.WINDOW_WIDTH / 2 - menuStart.getSize().width, Execute.WINDOW_HEIGHT / 2 - menuStart.getSize().height));
-		cursorPointList.add(new Point(Execute.WINDOW_WIDTH / 2 - menuRanking.getSize().width, Execute.WINDOW_HEIGHT / 2));
-		cursorPointList.add(new Point(Execute.WINDOW_WIDTH / 2 - menuRule.getSize().width, Execute.WINDOW_HEIGHT / 2 + menuRule.getSize().height));
+		bgm = new WAVFileReader("sound/title_bgm.wav");
 
-		currentPoint = cursorPointList.get(0);
+		cursorSE = new WAVFileReader("sound/cursor.wav");
+
+		dicideSE = new WAVFileReader("sound/dicide.wav");
+
+		cursorPositionList = new ArrayList<>();
+		cursorPositionList.add(new Point(Execute.WINDOW_WIDTH / 2 - menuStart.getSize().width, Execute.WINDOW_HEIGHT / 2 - menuStart.getSize().height));
+		cursorPositionList.add(new Point(Execute.WINDOW_WIDTH / 2 - menuRanking.getSize().width, Execute.WINDOW_HEIGHT / 2));
+		cursorPositionList.add(new Point(Execute.WINDOW_WIDTH / 2 - menuRule.getSize().width, Execute.WINDOW_HEIGHT / 2 + menuRule.getSize().height));
+
+		currentPosition = cursorPositionList.get(0);
 	}
 
 	/**
@@ -91,6 +114,8 @@ public class TitleScene implements Scene {
 	@Override
 	public void init() {
 		sceneFlg = null;
+
+		bgm.loop();
 	}
 
 	/**
@@ -108,25 +133,31 @@ public class TitleScene implements Scene {
 	public void keyPressed(int key) {
 		switch (key) {
 		case KeyEvent.VK_UP:
-			if(currentPoint.equals(cursorPointList.get(1))) {
-				currentPoint = cursorPointList.get(0);
-			} else if (currentPoint.equals(cursorPointList.get(2))) {
-				currentPoint = cursorPointList.get(1);
+			if(currentPosition.equals(cursorPositionList.get(1))) {
+				cursorSE.play();
+				currentPosition = cursorPositionList.get(0);
+			} else if (currentPosition.equals(cursorPositionList.get(2))) {
+				cursorSE.play();
+				currentPosition = cursorPositionList.get(1);
 			}
 			break;
 
 		case KeyEvent.VK_DOWN:
-			if(currentPoint.equals(cursorPointList.get(0))) {
-				currentPoint = cursorPointList.get(1);
-			} else if (currentPoint.equals(cursorPointList.get(1))) {
-				currentPoint = cursorPointList.get(2);
+			if(currentPosition.equals(cursorPositionList.get(0))) {
+				cursorSE.play();
+				currentPosition = cursorPositionList.get(1);
+			} else if (currentPosition.equals(cursorPositionList.get(1))) {
+				cursorSE.play();
+				currentPosition = cursorPositionList.get(2);
 			}
 			break;
 
 		case KeyEvent.VK_ENTER:
-			if(currentPoint.equals(cursorPointList.get(0))) {
+			dicideSE.play();
+			if(currentPosition.equals(cursorPositionList.get(0))) {
 				sceneFlg = SceneFlg.MAIN;
-			} else if (currentPoint.equals(cursorPointList.get(1))) {
+				bgm.stop();
+			} else if (currentPosition.equals(cursorPositionList.get(1))) {
 				sceneFlg = SceneFlg.RANKING;
 			} else {
 				sceneFlg = SceneFlg.RULE;
@@ -164,15 +195,23 @@ public class TitleScene implements Scene {
 
 		graphics.drawImage(menuRule.getImage(), Execute.WINDOW_WIDTH / 2 - menuRule.getSize().width / 2, Execute.WINDOW_HEIGHT / 2 + menuRule.getSize().height, null);
 
-		graphics.drawImage(cursor.getImage().getSubimage(40, 0, 40, 40), currentPoint.x, currentPoint.y, null);
+		graphics.drawImage(cursor.getImage().getSubimage(40, 0, 40, 40), currentPosition.x, currentPosition.y, null);
 	}
 
 	/**
-	 * ゲームフラグ取得
+	 * ゲームフラグを取得
 	 */
 	@Override
 	public SceneFlg getSceneFlg() {
 		return sceneFlg;
+	}
+
+	/**
+	 * ゲームフラグを格納
+	 */
+	@Override
+	public void setSceneFlg(SceneFlg sceneFlg) {
+		this.sceneFlg = sceneFlg;
 	}
 
 }

@@ -1,14 +1,20 @@
 package scene;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import base.Execute;
+import character.Efect;
 import character.Enemy;
 import character.Player;
 import file.ImageFileReader;
+import file.WAVFileReader;
+import flg.GameFlg;
+import flg.SceneFlg;
 
 /**
  * メインシーンを構築する為のクラス
@@ -23,9 +29,34 @@ public class MainScene implements Scene {
 	private SceneFlg sceneFlg;
 
 	/**
+	 * ゲームフラグ
+	 */
+	private GameFlg gameFlg;
+
+	/**
 	 * 背景
 	 */
 	private ImageFileReader bg;
+
+	/**
+	 * ゲームスタートボタン
+	 */
+	private ImageFileReader gameStartBtn;
+
+	/**
+	 * bgm
+	 */
+	private WAVFileReader bgm;
+
+	/**
+	 * 死んだ音
+	 */
+	private WAVFileReader deadSE;
+
+	/**
+	 * ゲームスタート案内
+	 */
+	private Efect gameStartInfo;
 
 	/**
 	 * プレイヤー
@@ -36,11 +67,6 @@ public class MainScene implements Scene {
 	 * エネミー
 	 */
 	private ArrayList<Enemy> enemyList;
-
-	/**
-	 * エネミーが出現される時間
-	 */
-	private float appEnemyTime;
 
 	/**
 	 * エネミーが出現されるまでの時間を計測
@@ -58,6 +84,14 @@ public class MainScene implements Scene {
 	public MainScene () {
 		bg = new ImageFileReader("images/bg.png");
 
+		gameStartBtn = new ImageFileReader("images/enemy.png", 700, 500);
+
+		bgm = new WAVFileReader("sound/main_bgm.wav");
+
+		deadSE = new WAVFileReader("sound/dead.wav");
+
+		gameStartInfo = new Efect();
+
 		player = new Player();
 
 		enemyList = new ArrayList<>();
@@ -74,6 +108,12 @@ public class MainScene implements Scene {
 	public void init() {
 		sceneFlg = null;
 
+		bgm.loop();
+
+		gameFlg = GameFlg.READY;
+
+		gameStartInfo.init();
+
 		player.init();
 
 		for (Enemy e : enemyList) {
@@ -85,8 +125,6 @@ public class MainScene implements Scene {
 				e.setPositionRandom(enemyList.get(enemyList.size() - 1).getPosition().x);
 			}
 		}
-
-		appEnemyTime = 0.1f;
 
 		appEnemyTimer = 0.0f;
 
@@ -100,23 +138,34 @@ public class MainScene implements Scene {
 	public void action() {
 		player.action();
 
-		for (Enemy e : enemyList) {
-			e.action();
-
-			if (isCollision(player.getPosition(), e.getPosition(), player.getSize(), e.getSize())) {
-				sceneFlg = SceneFlg.GAMEOVER;
-				return;
+		switch (gameFlg) {
+		case READY:
+			gameStartInfo.action();
+			if (Execute.WINDOW_WIDTH - 50 < player.getPosition().x) {
+				gameFlg = GameFlg.START;
 			}
-		}
+			break;
 
-		if (appEnemyTimer > 0.0f) {
-			appEnemyTimer -= 1/ 60.0f;
-		} else {
-			appEnemyTimer = appEnemyTime;
+		case START:
+			for (Enemy e : enemyList) {
+				e.action();
+
+				if (isCollision(player.getPosition(), e.getPosition(), player.getSize(), e.getSize())) {
+					deadSE.play();
+					sceneFlg = SceneFlg.GAMEOVER;
+					bgm.stop();
+					return;
+				}
+			}
+
 			appEnemy();
-		}
 
-		score += 1/ 60.0f;
+			score += 1/ 60.0f;
+			break;
+
+		case END:
+			break;
+		}
 	}
 
 	/**
@@ -155,8 +204,30 @@ public class MainScene implements Scene {
 			e.paint(graphics);
 		}
 
+		graphics.setColor(Color.BLACK);
 		graphics.setFont(new Font("メイリオ", Font.BOLD, 50));
-		graphics.drawString("SCORE : " + String.format("%.1f", score), 0, 50);
+		graphics.drawString("SCORE : " + String.format("%.1f", score), 0, Execute.WINDOW_HEIGHT - 25);
+
+		if (gameFlg == GameFlg.READY) {
+			gameStartInfo.paint(graphics);
+			graphics.drawImage(gameStartBtn.getImage().getSubimage(50 * 2 - 10, 50 * 1, 50, 50 - 30), Execute.WINDOW_WIDTH - 50, Execute.WINDOW_HEIGHT - 101, null);
+		}
+	}
+
+	/**
+	 * ゲームフラグを取得
+	 */
+	@Override
+	public SceneFlg getSceneFlg() {
+		return sceneFlg;
+	}
+
+	/**
+	 * ゲームフラグを格納
+	 */
+	@Override
+	public void setSceneFlg(SceneFlg sceneFlg) {
+		this.sceneFlg = sceneFlg;
 	}
 
 	/**
@@ -176,14 +247,6 @@ public class MainScene implements Scene {
 	}
 
 	/**
-	 * ゲームフラグ取得
-	 */
-	@Override
-	public SceneFlg getSceneFlg() {
-		return sceneFlg;
-	}
-
-	/**
 	 * 当たり判定
 	 * @param p1
 	 * @param p2
@@ -194,7 +257,7 @@ public class MainScene implements Scene {
 	private boolean isCollision(Point p1, Point p2, Dimension d1, Dimension d2) {
 		boolean result = false;
 
-		if (p1.x < p2.x + d2.width && p1.x + d1.width > p2.x && p1.y < p2.y + d2.height && p1.y + d1.height > p2.y) {
+		if (p1.x < p2.x + (d2.width - 10) && p1.x + (d1.width - 10) > p2.x && p1.y < p2.y + (d2.height - 10) && p1.y + (d1.height - 10) > p2.y) {
 			result = true;
 		}
 
@@ -205,16 +268,24 @@ public class MainScene implements Scene {
 	 * エネミーの出現処理
 	 */
 	private void appEnemy() {
-		for (Enemy e : enemyList) {
-			if (!e.getMoveFlg()) {
-				int i = enemyList.indexOf(e);
-				if (i > 0) {
-					e.setPositionRandom(enemyList.get(i - 1).getPosition().x);
-				} else {
-					e.setPositionRandom(enemyList.get(enemyList.size() - 1).getPosition().x);
+		float appEnemyTime = 0.1f;
+
+		if (appEnemyTimer > 0.0f) {
+			appEnemyTimer -= 1/ 60.0f;
+		} else {
+			appEnemyTimer = appEnemyTime;
+
+			for (Enemy e : enemyList) {
+				if (!e.getMoveFlg()) {
+					int i = enemyList.indexOf(e);
+					if (i > 0) {
+						e.setPositionRandom(enemyList.get(i - 1).getPosition().x);
+					} else {
+						e.setPositionRandom(enemyList.get(enemyList.size() - 1).getPosition().x);
+					}
+					e.setMoveFlg(true);
+					break;
 				}
-				e.setMoveFlg(true);
-				break;
 			}
 		}
 	}

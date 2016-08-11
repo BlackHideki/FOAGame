@@ -10,6 +10,8 @@ import com.sun.glass.events.KeyEvent;
 import base.Execute;
 import file.ImageFileReader;
 import file.TextFileReader;
+import file.WAVFileReader;
+import flg.SceneFlg;
 
 public class RankingScene implements Scene {
 
@@ -59,6 +61,11 @@ public class RankingScene implements Scene {
 	private TextFileReader ranking;
 
 	/**
+	 * 決定音
+	 */
+	private WAVFileReader dicideSE;
+
+	/**
 	 * RankingScene を新しく生成
 	 */
 	public RankingScene () {
@@ -77,6 +84,8 @@ public class RankingScene implements Scene {
 		menuBack = new ImageFileReader("images/menu_back.png", 88, 50);
 
 		ranking = new TextFileReader("text/ranking.txt");
+
+		dicideSE = new WAVFileReader("sound/dicide.wav");
 	}
 
 	/**
@@ -101,6 +110,7 @@ public class RankingScene implements Scene {
 	@Override
 	public void keyPressed(int key) {
 		if (key == KeyEvent.VK_ENTER) {
+			dicideSE.play();
 			sceneFlg = SceneFlg.TITLE;
 		}
 	}
@@ -149,11 +159,19 @@ public class RankingScene implements Scene {
 	}
 
 	/**
-	 * ゲームフラグ取得
+	 * ゲームフラグを取得
 	 */
 	@Override
 	public SceneFlg getSceneFlg() {
 		return sceneFlg;
+	}
+
+	/**
+	 * ゲームフラグを格納
+	 */
+	@Override
+	public void setSceneFlg(SceneFlg sceneFlg) {
+		this.sceneFlg = sceneFlg;
 	}
 
 }

@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class SceneManager {
 
 	/**
-	 * 各シーンを格納するリスト
+	 * シーンをリストに格納
 	 */
 	private LinkedList<Scene> sceneList;
 
@@ -32,7 +32,7 @@ public class SceneManager {
 		sceneList.add(new RankingScene());
 		sceneList.add(new RuleScene());
 
-		currentScene = sceneList.get(1);
+		currentScene = sceneList.get(0);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class SceneManager {
 		if (currentScene.getSceneFlg() != null) {
 			switch (currentScene.getSceneFlg()) {
 			case TITLE:
-				currentScene = sceneList.get(0);
+					currentScene = sceneList.get(0);
 				break;
 
 			case MAIN:
@@ -57,21 +57,21 @@ public class SceneManager {
 				break;
 
 			case GAMEOVER:
+				GameOverScene gos = new GameOverScene();
+				MainScene ms = (MainScene)currentScene;
+				gos.setScore(ms.getScore());
+				sceneList.set(2, gos);
 				currentScene = sceneList.get(2);
 				break;
 
 			case RANKING:
 				currentScene = sceneList.get(3);
-
 				break;
 
 			case RULE:
 				currentScene = sceneList.get(4);
 				break;
 			}
-		}
-
-		if (currentScene.getSceneFlg() != null) {
 			init();
 		}
 

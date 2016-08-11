@@ -57,7 +57,7 @@ public class Player implements Character {
 	private int imageInXBefore;
 
 	/**
-	 * 切り替える時間
+	 * 切り替えるまでの時間
 	 */
 	private float animeTimer;
 
@@ -190,6 +190,8 @@ public class Player implements Character {
 	 * 移動アニメーション
 	 */
 	private void anime() {
+		float animeTime = 0.05f;
+
 		if (animeTimer > 0.0f) {
 			animeTimer -= 1 / 60.0f;
 		} else {
@@ -213,7 +215,7 @@ public class Player implements Character {
 				imageInXBefore = 100;
 				break;
 			}
-			animeTimer = 0.1f;
+			animeTimer = animeTime;
 		}
 	}
 

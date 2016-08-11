@@ -26,8 +26,6 @@ public class GameMechanism extends JPanel implements Runnable {
 		setSize(width, height);
 
 		sceneManager = new SceneManager();
-
-		new Thread(this).start();
 	}
 
 	/**
@@ -35,6 +33,8 @@ public class GameMechanism extends JPanel implements Runnable {
 	 */
 	public void init() {
 		sceneManager.init();
+
+		new Thread(this).start();
 	}
 
 	/**
