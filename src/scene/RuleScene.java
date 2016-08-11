@@ -10,6 +10,11 @@ import file.ImageFileReader;
 import file.WAVFileReader;
 import flg.SceneFlg;
 
+/**
+ * ルールシーンを構築する為のクラス
+ * @author kudo
+ *
+ */
 public class RuleScene implements Scene {
 
 	/**

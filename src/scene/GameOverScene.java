@@ -14,6 +14,11 @@ import file.TextFileReader;
 import file.WAVFileReader;
 import flg.SceneFlg;
 
+/**
+ * ゲームオーバーシーンを構築する為のクラス
+ * @author kudo
+ *
+ */
 public class GameOverScene implements Scene {
 
 	/**

@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.util.LinkedList;
 
 /**
- * ゲームの仕組みを簡略化したクラス
+ * 各シーンを管理する為のクラス
  * @author kudouhideki
  *
  */

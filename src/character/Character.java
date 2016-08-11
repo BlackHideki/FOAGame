@@ -9,13 +9,30 @@ import java.awt.Graphics;
  */
 public interface Character {
 
+	/**
+	 * 初期化
+	 */
 	public void init();
 
+	/**
+	 * 処理
+	 */
 	public void action();
 
+	/**
+	 * キー押下
+	 * @param key
+	 */
 	public void keyPressed(int key);
 
+	/**
+	 * キー解放
+	 */
 	public void keyReleased();
 
+	/**
+	 * 描画
+	 * @param graphics
+	 */
 	public void paint(Graphics graphics);
 }

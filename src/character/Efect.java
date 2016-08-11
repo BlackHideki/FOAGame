@@ -50,6 +50,9 @@ public class Efect implements Character {
 		position = new Point(Execute.WINDOW_WIDTH - size.width, Execute.WINDOW_HEIGHT - size.height * 4 + size.height / 2);
 	}
 
+	/**
+	 * 初期化
+	 */
 	@Override
 	public void init() {
 		xSell = 3;
@@ -59,6 +62,9 @@ public class Efect implements Character {
 		animeTimer = 0.0f;
 	}
 
+	/**
+	 * 処理
+	 */
 	@Override
 	public void action() {
 		float animeTime = 0.3f;
@@ -90,16 +96,25 @@ public class Efect implements Character {
 		}
 	}
 
+	/**
+	 * キー押下
+	 */
 	@Override
 	public void keyPressed(int key) {
 
 	}
 
+	/**
+	 * キー解放
+	 */
 	@Override
 	public void keyReleased() {
 
 	}
 
+	/**
+	 * 描画
+	 */
 	@Override
 	public void paint(Graphics graphics) {
 		graphics.drawImage(image.getImage().getSubimage(size.width * xSell, size.height * 8, size.width, size.height), position.x, position.y, null);

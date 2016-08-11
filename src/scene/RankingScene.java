@@ -13,6 +13,11 @@ import file.TextFileReader;
 import file.WAVFileReader;
 import flg.SceneFlg;
 
+/**
+ * ランキングシーンを構築する為のクラス
+ * @author kudo
+ *
+ */
 public class RankingScene implements Scene {
 
 	/**
